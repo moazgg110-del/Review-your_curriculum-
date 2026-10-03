@@ -4,8 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <meta name="theme-color" content="#172554">
-<meta name="description" content="منصة تفاعلية لمذاكرة الدراسات الاجتماعية للصف الثالث الإعدادي — مبنية على محتوى الكتاب المرفوع">
-<meta name="author" content="معاذ محمد عبد النبي">
+<meta name="description" content="منصة تفاعلية لمذاكرة الدراسات الاجتماعية للصف الثالث الإعدادي">
+<meta name="author" content="مبرمج">
 <title>دراسات اجتماعية | الصف الثالث الإعدادي</title>
 <link rel="stylesheet" href="style.css">
 </head>
@@ -17,10 +17,6 @@
      ========================================================= -->
 <header id="mainHeader" class="main-header">
     <div class="header-inner">
-        <div class="programmer-top-badge" aria-label="المبرمج معاذ محمد عبد النبي">
-            <span class="programmer-top-circle">م</span>
-            <span>معاذ محمد عبد النبي</span>
-        </div>
         <button id="menuButton" class="header-button" type="button" aria-label="فتح القائمة">☰</button>
         <div class="app-brand">
             <div class="brand-icon" aria-hidden="true">📚</div>
@@ -173,7 +169,7 @@
 
     <footer class="programmer-footer">
         <span>تم التطوير والبرمجة بالكامل بواسطة</span>
-        <strong>المبرمج معاذ محمد عبد النبي</strong>
+        <strong>مبرمج</strong>
     </footer>
 </section>
 
@@ -188,7 +184,7 @@
     <div id="unitsFullGrid" class="units-full-grid"></div>
     <footer class="programmer-footer">
         <span>تم التطوير والبرمجة بالكامل بواسطة</span>
-        <strong>المبرمج معاذ محمد عبد النبي</strong>
+        <strong>مبرمج</strong>
     </footer>
 </section>
 
@@ -231,49 +227,20 @@
             <p id="lessonKeyIdeaText"></p>
         </section>
 
-        <!-- النص الكامل للدرس: سيعرض هنا الشرح الكامل، وليس الملخص فقط -->
-        <section class="full-lesson-section" aria-labelledby="fullLessonHeading">
-            <div class="full-lesson-heading">
-                <span class="section-badge">📖 الشرح الكامل</span>
-                <h2 id="fullLessonHeading">الدرس كاملًا</h2>
-                <p>اقرأ الشرح من البداية للنهاية. الكلمات والجمل المهمة ستظهر بشكل مميز داخل الشرح.</p>
-            </div>
+        <div id="lessonContent" class="lesson-content"></div>
 
-            <!--
-              JavaScript يضع هنا النص الكامل للدرس.
-              تم إبقاء هذا العنصر منفصلًا حتى يستطيع الطالب متابعة القراءة بسهولة.
-            -->
-            <div id="lessonContent" class="lesson-content full-lesson-text"></div>
-
-            <!-- منطقة متابعة القراءة -->
-            <div id="readingFollowArea" class="reading-follow-area" aria-live="polite">
-                <span id="readingFollowIcon">👁️</span>
-                <div>
-                    <strong id="readingFollowTitle">متابعة القراءة</strong>
-                    <p id="readingFollowText">ابدأ القراءة من أول الدرس وتحرك مع النص.</p>
-                </div>
-            </div>
-        </section>
-
-        <!-- نهاية جزء الشرح -->
-        <section id="lessonPartEndSection" class="lesson-part-end-section">
-            <div class="part-end-icon">✅</div>
-            <div class="part-end-text">
-                <strong>خلصت الجزء ده؟</strong>
-                <span>اضغط على الزر بعد ما تخلص قراءته عشان تسجل تقدمك.</span>
-            </div>
-            <button id="finishLessonPartButton" class="primary-button" type="button">
-                ✅ نهاية الجزء
-            </button>
+        <section id="interactiveVisualSection" class="interactive-visual-section">
+            <h2>🖼️ الصورة التفاعلية</h2>
+            <div id="interactiveVisual" class="interactive-visual"></div>
         </section>
 
         <section id="importantTermsSection" class="important-terms-section">
-            <h2>📌 أهم المصطلحات — بعد الشرح الكامل</h2>
+            <h2>📌 أهم المصطلحات</h2>
             <div id="importantTermsList" class="terms-grid"></div>
         </section>
 
         <section id="importantPointsSection" class="important-points-section">
-            <h2>⭐ أهم النقاط — للمراجعة السريعة</h2>
+            <h2>⭐ أهم النقاط</h2>
             <ul id="importantPointsList"></ul>
         </section>
 
@@ -286,16 +253,13 @@
             <div class="completion-icon">🎯</div>
             <h2>خلصت المذاكرة؟</h2>
             <p>بعد مراجعة الدرس يمكنك دخول الاختبار.</p>
-            <div id="lessonReadyStatus" class="lesson-ready-status" aria-live="polite">
-                📖 اقرأ الدرس كاملًا أولًا، ثم أنهِ الأجزاء، وبعدها ابدأ الاختبار.
-            </div>
             <button id="startLessonExamButton" class="primary-button" type="button">📝 ابدأ اختبار الدرس</button>
         </section>
     </article>
 
     <footer class="programmer-footer">
         <span>تم التطوير والبرمجة بالكامل بواسطة</span>
-        <strong>المبرمج معاذ محمد عبد النبي</strong>
+        <strong>مبرمج</strong>
     </footer>
 </section>
 
@@ -318,8 +282,8 @@
     <div class="exam-rules-card">
         <h2>📋 تعليمات الاختبار</h2>
         <ul>
-            <li>الاختبار يتكون من 15 سؤالًا.</li>
-            <li>الدرجة النهائية 15 درجة، درجة لكل سؤال.</li>
+            <li>الاختبار من 10 إلى 15 سؤالًا حسب الدرس.</li>
+            <li>الدرجة النهائية 15 درجة.</li>
             <li>يشترط الحصول على 65% على الأقل للانتقال للدرس التالي.</li>
             <li>إذا لم تحقق نسبة النجاح، يمكنك إعادة المذاكرة والمحاولة مرة أخرى.</li>
         </ul>
@@ -445,7 +409,7 @@
     </div>
     <footer class="programmer-footer">
         <span>تم التطوير والبرمجة بالكامل بواسطة</span>
-        <strong>المبرمج معاذ محمد عبد النبي</strong>
+        <strong>مبرمج</strong>
     </footer>
 </section>
 
@@ -490,7 +454,7 @@
      ========================================================= -->
 <footer id="appFooter" class="app-footer">
     <span>تم التطوير والبرمجة بالكامل بواسطة</span>
-    <strong>المبرمج معاذ محمد عبد النبي</strong>
+    <strong>مبرمج</strong>
 </footer>
 
 </div>
