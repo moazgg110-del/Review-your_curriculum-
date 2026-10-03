@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#172554">
+<meta name="description" content="منصة تفاعلية لمذاكرة الدراسات الاجتماعية للصف الثالث الإعدادي — مبنية على محتوى الكتاب المرفوع">
+<meta name="author" content="معاذ محمد عبد النبي">
+<title>دراسات اجتماعية | الصف الثالث الإعدادي</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="app" class="app-container">
+
+<!-- =========================================================
+     HEADER
+     ========================================================= -->
+<header id="mainHeader" class="main-header">
+    <div class="header-inner">
+        <div class="programmer-top-badge" aria-label="المبرمج معاذ محمد عبد النبي">
+            <span class="programmer-top-circle">م</span>
+            <span>معاذ محمد عبد النبي</span>
+        </div>
+        <button id="menuButton" class="header-button" type="button" aria-label="فتح القائمة">☰</button>
+        <div class="app-brand">
+            <div class="brand-icon" aria-hidden="true">📚</div>
+            <div class="brand-text">
+                <strong>دراسات 3 إعدادي</strong>
+                <span>الترم الأول 2026 / 2027</span>
+            </div>
+        </div>
+        <button id="homeButton" class="header-button" type="button" aria-label="الرئيسية">🏠</button>
+    </div>
+</header>
+
+<!-- =========================================================
+     SIDE MENU
+     ========================================================= -->
+<aside id="sideMenu" class="side-menu" aria-hidden="true">
+    <div class="side-menu-header">
+        <button id="closeMenuButton" class="close-menu-button" type="button" aria-label="إغلاق القائمة">×</button>
+        <div class="student-avatar" aria-hidden="true">👨‍🎓</div>
+        <div class="student-info">
+            <strong id="menuStudentName">الطالب</strong>
+            <span id="menuStudentLevel">المستوى: لم يبدأ بعد</span>
+        </div>
+    </div>
+    <nav id="mainNavigation" class="main-navigation" aria-label="القائمة الرئيسية">
+        <button class="navigation-item active" type="button" data-screen="homeScreen">🏠 الرئيسية</button>
+        <button class="navigation-item" type="button" data-screen="unitsScreen">📚 الوحدات والدروس</button>
+        <button class="navigation-item" type="button" data-screen="examsScreen">📝 الاختبارات السابقة</button>
+        <button class="navigation-item" type="button" data-screen="progressScreen">📊 تقدمي ومستواي</button>
+        <button class="navigation-item" type="button" data-screen="achievementsScreen">🏆 إنجازاتي</button>
+        <button class="navigation-item" type="button" data-screen="aboutScreen">ℹ️ عن المنصة</button>
+    </nav>
+    <div class="side-menu-footer">
+        <span>الصف الثالث الإعدادي</span>
+        <span>الترم الأول</span>
+    </div>
+</aside>
+<div id="menuOverlay" class="menu-overlay" aria-hidden="true"></div>
+
+<!-- =========================================================
+     MAIN CONTENT
+     ========================================================= -->
+<main id="mainContent" class="main-content">
+
+<!-- =========================================================
+     HOME SCREEN
+     ========================================================= -->
+<section id="homeScreen" class="screen active-screen">
+    <div class="welcome-card">
+        <div class="welcome-content">
+            <span class="welcome-label">👋 أهلاً بك في منصتك التعليمية</span>
+            <h1 id="homeTitle">مستعد تكمل رحلتك؟ 🚀</h1>
+            <p id="welcomeMessage">ذاكر خطوة بخطوة، اختبر نفسك، وطوّر مستواك.</p>
+        </div>
+        <div class="welcome-icon" aria-hidden="true">📚</div>
+    </div>
+
+    <div id="studentLevelCard" class="student-level-card">
+        <div class="card-heading">
+            <span class="card-icon">🏆</span>
+            <div>
+                <span class="card-label">مستواك الحالي</span>
+                <h2 id="studentLevelTitle">لم يبدأ بعد</h2>
+            </div>
+        </div>
+        <div class="level-content">
+            <div id="levelProgressCircle" class="level-progress-circle" data-progress="0">
+                <span id="studentPercentage">0%</span>
+            </div>
+            <div class="level-details">
+                <strong id="levelName">ابدأ أول اختبار</strong>
+                <p id="levelDescription">سيظهر مستواك بناءً على نتائج الاختبارات.</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="currentLessonCard" class="current-lesson-card">
+        <div class="card-heading">
+            <span class="card-icon">📖</span>
+            <div>
+                <span class="card-label">الدرس الحالي</span>
+                <h2 id="currentLessonTitle">الدرس الأول</h2>
+            </div>
+            <span id="currentLessonStatus" class="lesson-status unlocked">🔓 متاح</span>
+        </div>
+        <p id="currentLessonDescription">ابدأ مذاكرة الدرس الحالي.</p>
+        <div class="progress-item">
+            <div class="progress-label"><span>تقدم الدرس</span><strong id="currentLessonProgressText">0%</strong></div>
+            <div id="currentLessonProgressTrack" class="progress-track" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+                <div id="currentLessonProgressBar" class="progress-fill"></div>
+            </div>
+        </div>
+        <button id="continueLessonButton" class="primary-button" type="button">🚀 ابدأ المذاكرة</button>
+    </div>
+
+    <div id="motivationCard" class="motivation-card">
+        <span class="motivation-icon">💪</span>
+        <div>
+            <span>رسالة تشجيعية</span>
+            <p id="motivationMessage">أنت تقدر! كل خطوة تقربك من هدفك. 🌟</p>
+        </div>
+    </div>
+
+    <div id="progressOverviewCard" class="progress-overview-card">
+        <div class="card-heading">
+            <span class="card-icon">📊</span>
+            <h2>تقدمك في المنهج</h2>
+        </div>
+        <div class="progress-item">
+            <div class="progress-label"><span>إنجاز المحتوى</span><strong id="contentProgressText">0%</strong></div>
+            <div id="contentProgressBar" class="progress-track"><div id="contentProgressFill" class="progress-fill"></div></div>
+        </div>
+        <div class="progress-item">
+            <div class="progress-label"><span>إنجاز الكتاب</span><strong id="bookProgressText">0%</strong></div>
+            <div id="bookProgressBar" class="progress-track"><div id="bookProgressFill" class="progress-fill"></div></div>
+        </div>
+    </div>
+
+    <div id="statisticsSection" class="statistics-section">
+        <div class="section-heading"><h2>📈 إحصائياتك</h2><small>تتحدث تلقائيًا</small></div>
+        <div class="statistics-grid">
+            <article class="stat-card"><span>📚</span><strong id="completedLessonsCount">0</strong><small>دروس مكتملة</small></article>
+            <article class="stat-card"><span>📝</span><strong id="completedExamsCount">0</strong><small>اختبارات</small></article>
+            <article class="stat-card"><span>⭐</span><strong id="averageScore">0%</strong><small>متوسط الدرجات</small></article>
+            <article class="stat-card"><span>🔓</span><strong id="unlockedLessonsCount">1</strong><small>دروس مفتوحة</small></article>
+        </div>
+    </div>
+
+    <div id="recentExamSection" class="recent-exam-section">
+        <div class="card-heading">
+            <span class="card-icon">📝</span>
+            <h2>آخر اختبار</h2>
+            <button class="text-button" type="button" data-screen="examsScreen">كل الاختبارات</button>
+        </div>
+        <div id="recentExamContent" class="empty-state">
+            <span>📋</span>
+            <h3>لا توجد اختبارات بعد</h3>
+            <p>بعد أداء أول اختبار ستظهر النتيجة هنا.</p>
+        </div>
+    </div>
+
+    <div id="homeUnitsSection" class="home-units-section">
+        <div class="card-heading">
+            <span class="card-icon">📚</span>
+            <h2>وحدات المنهج</h2>
+            <button class="text-button" type="button" data-screen="unitsScreen">عرض الكل</button>
+        </div>
+        <div id="homeUnitsGrid" class="units-grid"></div>
+    </div>
+
+    <footer class="programmer-footer">
+        <span>تم التطوير والبرمجة بالكامل بواسطة</span>
+        <strong>المبرمج معاذ محمد عبد النبي</strong>
+    </footer>
+</section>
+
+<!-- =========================================================
+     UNITS SCREEN
+     ========================================================= -->
+<section id="unitsScreen" class="screen">
+    <div class="screen-header">
+        <button class="back-button" type="button" data-screen="homeScreen">← الرئيسية</button>
+        <div><span class="card-label">📚 المنهج</span><h1>الوحدات والدروس</h1></div>
+    </div>
+    <div id="unitsFullGrid" class="units-full-grid"></div>
+    <footer class="programmer-footer">
+        <span>تم التطوير والبرمجة بالكامل بواسطة</span>
+        <strong>المبرمج معاذ محمد عبد النبي</strong>
+    </footer>
+</section>
+
+<!-- =========================================================
+     LESSON SCREEN
+     ========================================================= -->
+<section id="lessonScreen" class="screen">
+    <div class="lesson-navigation">
+        <button id="lessonBackButton" class="back-button" type="button">← العودة</button>
+        <span id="lessonUnitIndicator">الوحدة الأولى</span>
+    </div>
+
+    <article id="lessonArticle" class="lesson-article">
+        <header class="lesson-header">
+            <span id="lessonNumber" class="lesson-number">الدرس الأول</span>
+            <h1 id="lessonTitle">عنوان الدرس</h1>
+            <p id="lessonSubtitle">شرح مبسط ومنظم</p>
+        </header>
+
+        <div class="lesson-reader">
+            <button id="readLessonButton" type="button">🔊 قراءة الدرس</button>
+            <button id="pauseReadingButton" type="button" disabled>⏸️ إيقاف مؤقت</button>
+            <button id="stopReadingButton" type="button" disabled>⏹️ إيقاف</button>
+            <label for="readingSpeed">سرعة القراءة</label>
+            <select id="readingSpeed">
+                <option value="0.7">بطيئة</option>
+                <option value="0.9" selected>عادية</option>
+                <option value="1.1">سريعة</option>
+                <option value="1.3">سريعة جدًا</option>
+            </select>
+        </div>
+
+        <section class="lesson-introduction">
+            <h2>💡 تمهيد الدرس</h2>
+            <p id="lessonIntroText"></p>
+        </section>
+
+        <section class="lesson-key-idea">
+            <h2>⭐ الفكرة الأساسية</h2>
+            <p id="lessonKeyIdeaText"></p>
+        </section>
+
+        <!-- النص الكامل للدرس: سيعرض هنا الشرح الكامل، وليس الملخص فقط -->
+        <section class="full-lesson-section" aria-labelledby="fullLessonHeading">
+            <div class="full-lesson-heading">
+                <span class="section-badge">📖 الشرح الكامل</span>
+                <h2 id="fullLessonHeading">الدرس كاملًا</h2>
+                <p>اقرأ الشرح من البداية للنهاية. الكلمات والجمل المهمة ستظهر بشكل مميز داخل الشرح.</p>
+            </div>
+
+            <!--
+              JavaScript يضع هنا النص الكامل للدرس.
+              تم إبقاء هذا العنصر منفصلًا حتى يستطيع الطالب متابعة القراءة بسهولة.
+            -->
+            <div id="lessonContent" class="lesson-content full-lesson-text"></div>
+
+            <!-- منطقة متابعة القراءة -->
+            <div id="readingFollowArea" class="reading-follow-area" aria-live="polite">
+                <span id="readingFollowIcon">👁️</span>
+                <div>
+                    <strong id="readingFollowTitle">متابعة القراءة</strong>
+                    <p id="readingFollowText">ابدأ القراءة من أول الدرس وتحرك مع النص.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- نهاية جزء الشرح -->
+        <section id="lessonPartEndSection" class="lesson-part-end-section">
+            <div class="part-end-icon">✅</div>
+            <div class="part-end-text">
+                <strong>خلصت الجزء ده؟</strong>
+                <span>اضغط على الزر بعد ما تخلص قراءته عشان تسجل تقدمك.</span>
+            </div>
+            <button id="finishLessonPartButton" class="primary-button" type="button">
+                ✅ نهاية الجزء
+            </button>
+        </section>
+
+        <section id="importantTermsSection" class="important-terms-section">
+            <h2>📌 أهم المصطلحات — بعد الشرح الكامل</h2>
+            <div id="importantTermsList" class="terms-grid"></div>
+        </section>
+
+        <section id="importantPointsSection" class="important-points-section">
+            <h2>⭐ أهم النقاط — للمراجعة السريعة</h2>
+            <ul id="importantPointsList"></ul>
+        </section>
+
+        <section id="quickReviewSection" class="quick-review-section">
+            <h2>🧠 راجع نفسك</h2>
+            <div id="quickReviewQuestions"></div>
+        </section>
+
+        <section id="lessonCompletionArea" class="lesson-completion-area">
+            <div class="completion-icon">🎯</div>
+            <h2>خلصت المذاكرة؟</h2>
+            <p>بعد مراجعة الدرس يمكنك دخول الاختبار.</p>
+            <div id="lessonReadyStatus" class="lesson-ready-status" aria-live="polite">
+                📖 اقرأ الدرس كاملًا أولًا، ثم أنهِ الأجزاء، وبعدها ابدأ الاختبار.
+            </div>
+            <button id="startLessonExamButton" class="primary-button" type="button">📝 ابدأ اختبار الدرس</button>
+        </section>
+    </article>
+
+    <footer class="programmer-footer">
+        <span>تم التطوير والبرمجة بالكامل بواسطة</span>
+        <strong>المبرمج معاذ محمد عبد النبي</strong>
+    </footer>
+</section>
+
+<!-- =========================================================
+     EXAM SCREEN
+     ========================================================= -->
+<section id="examScreen" class="screen">
+    <div class="exam-header">
+        <button id="examBackButton" class="back-button" type="button">← العودة</button>
+        <div>
+            <span id="examUnitName">الوحدة</span>
+            <h1 id="examTitle">اختبار الدرس</h1>
+        </div>
+        <div class="exam-counter">
+            <span>السؤال</span>
+            <strong id="examQuestionNumber">1</strong>
+        </div>
+    </div>
+
+    <div class="exam-rules-card">
+        <h2>📋 تعليمات الاختبار</h2>
+        <ul>
+            <li>الاختبار يتكون من 15 سؤالًا.</li>
+            <li>الدرجة النهائية 15 درجة، درجة لكل سؤال.</li>
+            <li>يشترط الحصول على 65% على الأقل للانتقال للدرس التالي.</li>
+            <li>إذا لم تحقق نسبة النجاح، يمكنك إعادة المذاكرة والمحاولة مرة أخرى.</li>
+        </ul>
+    </div>
+
+    <div class="exam-progress">
+        <div class="progress-label"><span>تقدم الاختبار</span><strong id="examProgressText">0%</strong></div>
+        <div class="progress-track"><div id="examProgressBar" class="progress-fill"></div></div>
+    </div>
+
+    <div id="examQuestionsContainer" class="exam-questions-container"></div>
+
+    <div class="exam-navigation">
+        <button id="previousQuestionButton" class="secondary-button" type="button">السابق</button>
+        <button id="nextQuestionButton" class="primary-button" type="button">التالي</button>
+        <button id="submitExamButton" class="success-button" type="button">إنهاء الاختبار</button>
+    </div>
+</section>
+
+<!-- =========================================================
+     EXAM RESULT SCREEN
+     ========================================================= -->
+<section id="examResultScreen" class="screen">
+    <div class="result-card">
+        <div id="resultIcon" class="result-icon">🎉</div>
+        <span>نتيجة الاختبار</span>
+        <h1 id="resultTitle">ممتاز!</h1>
+        <div id="resultScoreCircle" class="result-score-circle">
+            <strong id="resultScore">0 / 15</strong>
+            <span id="resultPercentage">0%</span>
+        </div>
+        <p id="resultMessage">نتيجتك ستظهر هنا.</p>
+        <div class="result-actions">
+            <button id="reviewExamButton" class="secondary-button" type="button">🔎 مراجعة الأخطاء</button>
+            <button id="retryExamButton" class="primary-button" type="button">🔄 إعادة الاختبار</button>
+            <button id="nextLessonButton" class="success-button" type="button">➡️ الدرس التالي</button>
+        </div>
+    </div>
+</section>
+
+<!-- =========================================================
+     REVIEW SCREEN
+     ========================================================= -->
+<section id="reviewScreen" class="screen">
+    <div class="screen-header">
+        <button id="reviewBackButton" class="back-button" type="button">← العودة</button>
+        <div><span class="card-label">🔎 المراجعة</span><h1 id="reviewTitle">مراجعة الاختبار</h1></div>
+    </div>
+    <div id="reviewSummary" class="review-summary"></div>
+    <div id="reviewQuestionsContainer" class="review-questions-container"></div>
+    <div class="review-correct-answer-note">
+        <strong>💡 تذكّر:</strong>
+        <span>الإجابة الصحيحة تظهر في المراجعة بعد انتهاء الاختبار.</span>
+    </div>
+</section>
+
+<!-- =========================================================
+     PREVIOUS EXAMS SCREEN
+     ========================================================= -->
+<section id="examsScreen" class="screen">
+    <div class="screen-header">
+        <button class="back-button" type="button" data-screen="homeScreen">← الرئيسية</button>
+        <div><span class="card-label">📝 السجل</span><h1>اختباراتي السابقة</h1></div>
+    </div>
+    <div id="examsSummary" class="exams-summary"></div>
+    <div id="examsHistoryList" class="exams-history-list">
+        <div class="empty-state">
+            <span>📝</span>
+            <h2>لا توجد اختبارات محفوظة</h2>
+            <p>ستظهر نتائجك هنا بعد أول اختبار.</p>
+        </div>
+    </div>
+</section>
+
+<!-- =========================================================
+     PROGRESS SCREEN
+     ========================================================= -->
+<section id="progressScreen" class="screen">
+    <div class="screen-header">
+        <button class="back-button" type="button" data-screen="homeScreen">← الرئيسية</button>
+        <div><span class="card-label">📊 الإحصائيات</span><h1>تقدمي ومستواي</h1></div>
+    </div>
+    <div class="progress-dashboard">
+        <div class="dashboard-card"><span>📚</span><strong id="dashboardContentPercent">0%</strong><small>إنجاز المحتوى</small></div>
+        <div class="dashboard-card"><span>📕</span><strong id="dashboardBookPercent">0%</strong><small>إنجاز الكتاب</small></div>
+        <div class="dashboard-card"><span>⭐</span><strong id="dashboardAverage">0%</strong><small>متوسط الاختبارات</small></div>
+        <div class="dashboard-card"><span>🏆</span><strong id="dashboardLevel">-</strong><small>المستوى</small></div>
+    </div>
+    <div id="progressUnitsList" class="progress-units-list"></div>
+</section>
+
+<!-- =========================================================
+     ACHIEVEMENTS SCREEN
+     ========================================================= -->
+<section id="achievementsScreen" class="screen">
+    <div class="screen-header">
+        <button class="back-button" type="button" data-screen="homeScreen">← الرئيسية</button>
+        <div><span class="card-label">🏆 الإنجازات</span><h1>إنجازاتي</h1></div>
+    </div>
+    <div id="achievementsGrid" class="achievements-grid"></div>
+</section>
+
+<!-- =========================================================
+     ABOUT SCREEN
+     ========================================================= -->
+<section id="aboutScreen" class="screen">
+    <div class="screen-header">
+        <button class="back-button" type="button" data-screen="homeScreen">← الرئيسية</button>
+        <div><span class="card-label">ℹ️ معلومات</span><h1>عن المنصة</h1></div>
+    </div>
+    <div class="about-card">
+        <div class="about-logo">📚</div>
+        <h2>منصة الدراسات الاجتماعية</h2>
+        <p>منصة تعليمية تفاعلية تساعد الطالب على مذاكرة الدروس ومراجعتها واختبار نفسه.</p>
+        <div class="about-features">
+            <div>📖 شرح منظم</div>
+            <div>🖼️ عناصر بصرية تفاعلية</div>
+            <div>🔊 قراءة صوتية</div>
+            <div>📝 اختبارات</div>
+            <div>📊 متابعة التقدم</div>
+            <div>🏆 متابعة المستوى</div>
+        </div>
+    </div>
+    <footer class="programmer-footer">
+        <span>تم التطوير والبرمجة بالكامل بواسطة</span>
+        <strong>المبرمج معاذ محمد عبد النبي</strong>
+    </footer>
+</section>
+
+</main>
+
+<!-- =========================================================
+     GLOBAL MODALS
+     ========================================================= -->
+<div id="modalLayer" class="modal-layer" aria-hidden="true">
+
+    <div id="generalModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+        <button id="modalCloseButton" class="modal-close" type="button" aria-label="إغلاق">×</button>
+        <div id="modalIcon" class="modal-icon">💡</div>
+        <h2 id="modalTitle">تنبيه</h2>
+        <div id="modalContent"></div>
+        <div id="modalActions"></div>
+    </div>
+
+</div>
+
+<!-- =========================================================
+     TOAST NOTIFICATIONS
+     ========================================================= -->
+<div
+    id="toastContainer"
+    class="toast-container"
+    aria-live="polite"
+    aria-atomic="true"
+></div>
+
+<!-- =========================================================
+     AUDIO / SPEECH STATUS
+     ========================================================= -->
+<div
+    id="speechStatus"
+    class="speech-status"
+    aria-live="polite"
+></div>
+
+<!-- =========================================================
+     FOOTER
+     ========================================================= -->
+<footer id="appFooter" class="app-footer">
+    <span>تم التطوير والبرمجة بالكامل بواسطة</span>
+    <strong>المبرمج معاذ محمد عبد النبي</strong>
+</footer>
+
+</div>
+
+<!-- =========================================================
+     JAVASCRIPT
+     ========================================================= -->
+<script src="script.js" defer></script>
+
+</body>
+</html>
