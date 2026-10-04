@@ -280,7 +280,8 @@ button:disabled {
     animation: screenIn .3s ease;
 }
 
-.screen.active-screen {
+.screen.active-screen,
+.screen.active {
     display: block;
 }
 
