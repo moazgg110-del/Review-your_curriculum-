@@ -2,7 +2,7 @@
    SOCIAL STUDIES INTERACTIVE PLATFORM
    CSS FILE
    Grade 9 / Third Preparatory - First Term
-   Programmer: مبرمج
+   Programmer
    ========================================================= */
 
 :root {
@@ -816,14 +816,26 @@ button:disabled {
     border-top: 1px solid var(--border);
     text-align: center;
     color: var(--muted);
-    font-size: 11px;
+    font-size: 10px;
+    opacity: .72;
+}
+
+.programmer-footer .programmer-label {
+    display: block;
+    margin-bottom: 1px;
+    font-size: 9px;
+    font-weight: 500;
+    letter-spacing: .2px;
+    opacity: .78;
 }
 
 .programmer-footer strong {
     display: block;
-    margin-top: 2px;
+    margin-top: 0;
     color: var(--primary-dark);
-    font-size: 13px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: .1px;
 }
 
 /* =========================================================
@@ -1912,46 +1924,16 @@ a:focus-visible {
     }
 }
 
-/* =========================================================
-   LESSON PARTS - 4 PARTS PER LESSON
-   ========================================================= */
-.lesson-part{
-  margin:18px 0;
-  padding:20px;
-  border:1px solid rgba(79,124,255,.14);
-  border-radius:20px;
-  background:rgba(255,255,255,.86);
-  box-shadow:0 8px 24px rgba(67,93,133,.08);
-}
-.lesson-part h2{margin-top:10px}
-.part-badge{
-  display:inline-flex;
-  align-items:center;
-  gap:7px;
-  padding:7px 12px;
-  border-radius:999px;
-  background:#eef4ff;
-  color:#315ac9;
-  font-weight:800;
-}
-.part-note{
-  margin-top:14px;
-  padding:12px 14px;
-  border-radius:14px;
-  background:#fff8df;
-  border:1px solid rgba(244,185,66,.25);
-}
-.part-complete-button{
-  margin-top:15px;
-  border:0;
-  border-radius:14px;
-  padding:11px 16px;
-  background:#42b883;
-  color:#fff;
-  font-weight:800;
-}
-.part-complete-button:disabled{
-  opacity:1;
-  background:#dbeee5;
-  color:#277052;
-}
+/* ===== Expanded lesson system ===== */
+.source-note{margin:14px 0;padding:14px 16px;border-radius:16px;background:rgba(59,130,246,.08);border:1px solid rgba(59,130,246,.18);line-height:1.9;color:#334155}
+.lesson-part{margin:18px 0;padding:18px;border-radius:22px;background:#fff;border:1px solid #e2e8f0;box-shadow:0 8px 24px rgba(15,23,42,.06)}
+.part-head{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:12px}
+.part-head span{background:#eef2ff;color:#4338ca;padding:6px 10px;border-radius:999px;font-weight:800;font-size:.85rem}
+.part-head h2{margin:0;flex:1;min-width:220px}
+.lesson-paragraph{font-size:1.06rem;line-height:2.05;margin:12px 0;color:#1e293b}
+.keyword-highlight{background:#fff3a3;padding:1px 4px;border-radius:5px;font-weight:800;color:#7c2d12}
+.focus-box{margin:14px 0;padding:13px 15px;border-right:5px solid #f59e0b;background:#fffbeb;border-radius:12px;line-height:1.9}
+.part-complete-button{width:100%;min-height:48px;border:0;border-radius:14px;background:#0f766e;color:#fff;font-weight:800;font-size:1rem;cursor:pointer}
+.part-complete-button:disabled{background:#cbd5e1;color:#64748b;cursor:not-allowed}
+.quick-answer{margin-bottom:12px;padding:14px;border-radius:15px;background:#f8fafc;border:1px solid #e2e8f0;line-height:1.8}
+.quick-answer p{margin:.4rem 0 0}
