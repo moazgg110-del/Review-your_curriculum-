@@ -2035,3 +2035,12 @@ input,select,textarea { background:#0b1220; color:#f1f5f9; border-color:#334155;
 .card,.panel,.modal-content { background:#0b1220 !important; color:#e5e7eb !important; border-color:#26354d !important; }
 .js-speech-word { border-radius:5px; transition:.12s; }
 .js-speech-active { background:#facc15 !important; color:#111827 !important; box-shadow:0 0 14px rgba(250,204,21,.35); }
+
+/* =========================================================
+   AUDIO READER - MOBILE SAFE CONTROLS
+   ========================================================= */
+.lesson-reader{position:relative;z-index:5;display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.lesson-reader button,.lesson-reader select{position:relative;z-index:6;touch-action:manipulation}
+.speech-status{min-height:24px;margin:10px 0 0;padding:8px 12px;border-radius:12px;background:rgba(30,41,59,.72);color:#cbd5e1;font-size:13px}
+.js-speech-active{background:rgba(56,189,248,.28);border-radius:4px;box-shadow:0 0 10px rgba(56,189,248,.15)}
+@media(max-width:600px){.lesson-reader{gap:8px}.lesson-reader button{min-height:44px}.lesson-reader select{min-height:44px}}
