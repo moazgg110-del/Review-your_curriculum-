@@ -10,6 +10,13 @@
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
+<div class="ambient-background" aria-hidden="true">
+  <div class="ambient-orb orb-a"></div>
+  <div class="ambient-orb orb-b"></div>
+  <div class="ambient-orb orb-c"></div>
+  <div class="ambient-grid"></div>
+  <div id="ambientParticles" class="ambient-particles"></div>
+</div>
 <div id="app" class="app-container">
 
 <!-- =========================================================
@@ -455,8 +462,16 @@
      FOOTER
      ========================================================= -->
 <footer id="appFooter" class="app-footer programmer-footer">
-    <span class="programmer-label">مبرمج</span>
-    <strong>معاذ محمد عبد النبي</strong>
+    <div class="programmer-orbit" aria-label="معلومات المطور">
+        <span class="orbit-ring ring-one"></span>
+        <span class="orbit-ring ring-two"></span>
+        <span class="orbit-dot dot-one"></span>
+        <span class="orbit-dot dot-two"></span>
+        <span class="programmer-core">
+            <span class="programmer-label">تم التطوير بالكامل والبرمجة بواسطة</span>
+            <strong>المبرمج معاذ محمد عبد النبي</strong>
+        </span>
+    </div>
 </footer>
 
 </div>

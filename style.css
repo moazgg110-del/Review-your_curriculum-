@@ -1938,3 +1938,100 @@ a:focus-visible {
 .part-complete-button:disabled{background:#cbd5e1;color:#64748b;cursor:not-allowed}
 .quick-answer{margin-bottom:12px;padding:14px;border-radius:15px;background:#f8fafc;border:1px solid #e2e8f0;line-height:1.8}
 .quick-answer p{margin:.4rem 0 0}
+
+/* =========================================================
+   DARK CINEMATIC STUDY MODE + MOVING BACKGROUND
+   ========================================================= */
+:root {
+    --primary: #60a5fa;
+    --primary-dark: #bfdbfe;
+    --primary-soft: #172554;
+    --secondary: #a78bfa;
+    --success: #4ade80;
+    --success-soft: #052e16;
+    --warning: #fbbf24;
+    --warning-soft: #451a03;
+    --danger: #f87171;
+    --danger-soft: #450a0a;
+    --info: #22d3ee;
+    --text: #f1f5f9;
+    --muted: #94a3b8;
+    --background: #030712;
+    --surface: #0b1220;
+    --border: #1e293b;
+    --shadow: 0 12px 35px rgba(0,0,0,.35);
+    --shadow-large: 0 22px 65px rgba(0,0,0,.5);
+}
+
+body {
+    background:
+      radial-gradient(circle at 15% 10%, rgba(37,99,235,.12), transparent 28%),
+      radial-gradient(circle at 85% 75%, rgba(124,58,237,.10), transparent 30%),
+      #030712;
+    color: var(--text);
+}
+
+.ambient-background {
+    position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden;
+    background: linear-gradient(120deg, rgba(255,255,255,.012), transparent 45%, rgba(96,165,250,.018));
+}
+.ambient-grid {
+    position:absolute; inset:-50%; opacity:.10;
+    background-image: linear-gradient(rgba(148,163,184,.12) 1px, transparent 1px), linear-gradient(90deg, rgba(148,163,184,.12) 1px, transparent 1px);
+    background-size: 52px 52px; transform: perspective(700px) rotateX(58deg) translateY(20%);
+    animation: gridMove 18s linear infinite;
+}
+.ambient-orb { position:absolute; border-radius:50%; filter:blur(18px); opacity:.24; mix-blend-mode:screen; }
+.orb-a{width:180px;height:180px;left:-45px;top:14%;background:#2563eb;animation:orbFloatA 13s ease-in-out infinite;}
+.orb-b{width:230px;height:230px;right:-70px;top:48%;background:#7c3aed;animation:orbFloatB 17s ease-in-out infinite;}
+.orb-c{width:120px;height:120px;left:42%;bottom:-45px;background:#0891b2;animation:orbFloatC 11s ease-in-out infinite;}
+.ambient-particles{position:absolute;inset:0;}
+.ambient-particle{position:absolute;width:3px;height:3px;border-radius:50%;background:#93c5fd;opacity:.45;box-shadow:0 0 12px rgba(147,197,253,.7);animation:particleDrift var(--dur) linear infinite;}
+@keyframes gridMove{from{transform:perspective(700px) rotateX(58deg) translateY(0)}to{transform:perspective(700px) rotateX(58deg) translateY(52px)}}
+@keyframes orbFloatA{50%{transform:translate(90px,45px) scale(1.15)}}
+@keyframes orbFloatB{50%{transform:translate(-80px,-65px) scale(.9)}}
+@keyframes orbFloatC{50%{transform:translate(40px,-80px) scale(1.25)}}
+@keyframes particleDrift{from{transform:translate3d(0,110vh,0) scale(.5)}to{transform:translate3d(var(--dx),-15vh,0) scale(1.2)}}
+
+#app { position:relative; z-index:1; }
+.main-header { background: rgba(3,7,18,.88); border-bottom-color:#1e293b; }
+.header-button { background:#0f1b31; color:#bfdbfe; }
+.header-button:hover { background:#172554; }
+.side-menu { background:#070d1a; border-color:#1e293b; }
+.menu-overlay { background:rgba(0,0,0,.72); }
+.welcome-card,.student-level-card,.dashboard-card,.unit-card,.lesson-card,.lesson-article,.lesson-introduction,.lesson-key-idea,.lesson-part-card,.review-question,.exam-history-card,.achievement-card,.progress-unit-card,.about-card,.exam-summary-card { background:rgba(11,18,32,.94); border-color:#1e293b; color:var(--text); }
+.source-note { background:#111827 !important; border-color:#334155 !important; color:#cbd5e1 !important; }
+input,select,textarea { background:#0b1220; color:#f1f5f9; border-color:#334155; }
+
+.programmer-footer { position:relative; min-height:150px; display:flex; justify-content:center; align-items:center; overflow:hidden; color:#cbd5e1; }
+.programmer-orbit { position:relative; width:190px; height:130px; display:grid; place-items:center; }
+.programmer-core { position:relative; z-index:3; width:150px; height:90px; border:1px solid rgba(96,165,250,.38); border-radius:50%; background:rgba(7,13,26,.9); box-shadow:0 0 35px rgba(37,99,235,.12), inset 0 0 25px rgba(96,165,250,.06); display:flex; flex-direction:column; justify-content:center; align-items:center; padding:10px; text-align:center; }
+.programmer-label { display:block; font-size:8px; letter-spacing:.5px; color:#64748b; margin-bottom:3px; }
+.programmer-footer strong { font-size:10px; color:#cbd5e1; font-weight:600; white-space:nowrap; }
+.orbit-ring { position:absolute; border:1px solid rgba(96,165,250,.20); border-radius:50%; transform:rotate(-18deg); }
+.ring-one{width:190px;height:82px;animation:orbitSpin 9s linear infinite;}
+.ring-two{width:165px;height:105px;transform:rotate(55deg);animation:orbitSpinReverse 12s linear infinite;}
+.orbit-dot{position:absolute;width:7px;height:7px;border-radius:50%;background:#60a5fa;box-shadow:0 0 14px rgba(96,165,250,.9);}
+.dot-one{animation:dotOrbit 6s linear infinite;}
+.dot-two{background:#a78bfa;animation:dotOrbitTwo 8s linear infinite;}
+@keyframes orbitSpin{to{transform:rotate(342deg)}}
+@keyframes orbitSpinReverse{to{transform:rotate(-305deg)}}
+@keyframes dotOrbit{from{transform:rotate(0deg) translateX(92px) rotate(0deg)}to{transform:rotate(360deg) translateX(92px) rotate(-360deg)}}
+@keyframes dotOrbitTwo{from{transform:rotate(180deg) translateX(78px) rotate(-180deg)}to{transform:rotate(-180deg) translateX(78px) rotate(180deg)}}
+
+@media (prefers-reduced-motion: reduce){.ambient-grid,.ambient-orb,.ambient-particle,.orbit-ring,.orbit-dot{animation:none!important}}
+
+/* Final dark-mode overrides for generated lesson blocks */
+.lesson-part,.lesson-part-card,.lesson-content,.review-question,.question-card,.exam-history-card,.interactive-card,.focus-box,.definition-box,.important-box {
+  background:#0b1220 !important; color:#e5e7eb !important; border-color:#26354d !important;
+}
+.lesson-part p,.lesson-part li,.lesson-content p,.lesson-content li,.lesson-part-card p { color:#dbe4f0 !important; }
+.lesson-part h2,.lesson-part h3,.lesson-content h2,.lesson-content h3 { color:#f8fafc !important; }
+.focus-box { background:#17120a !important; border-right-color:#f59e0b !important; }
+.keyword-highlight { background:#3b2f08 !important; color:#fde68a !important; }
+.lesson-reader { background:#07101f !important; border-color:#26354d !important; }
+.lesson-reader button,.secondary-button { border-color:#334155 !important; }
+.progress-track,.progress-bar-container { background:#111827 !important; }
+.card,.panel,.modal-content { background:#0b1220 !important; color:#e5e7eb !important; border-color:#26354d !important; }
+.js-speech-word { border-radius:5px; transition:.12s; }
+.js-speech-active { background:#facc15 !important; color:#111827 !important; box-shadow:0 0 14px rgba(250,204,21,.35); }

@@ -19,7 +19,7 @@ const CURRICULUM_UNITS=UNIT_DEFS.map(u=>({
  lessons:CURRICULUM.filter(l=>l.number>=u.from&&l.number<=u.to).map(l=>({...l,unitNumber:u.number,unitTitle:u.title}))
 }));
 const ACH=[['first','🌱','البداية','أنهيت أول درس.'],['five','🔥','نصف الطريق','اجتزت 5 دروس.'],['unit','📚','وحدة كاملة','أكملت وحدة دراسية.'],['all','🏆','المتفوق','أكملت المنهج كاملًا.']];
-let state,currentLesson=null,currentExam=null,lastExam=null,answers=[],questionIndex=0,utterance=null,speechMap=[],speechWordSpans=[],speechText='';
+let state,currentLesson=null,currentExam=null,lastExam=null,answers=[],questionIndex=0,utterance=null,speechMap=[],speechWordSpans=[],speechText='',speechChunks=[],speechChunkIndex=0,speechRunToken=0,speechVoice=null;
 const lessons=()=>CURRICULUM_UNITS.flatMap(u=>u.lessons);
 const lesson=id=>lessons().find(l=>l.id===id);
 const indexOfLesson=id=>lessons().findIndex(l=>l.id===id);
@@ -60,14 +60,76 @@ function renderHistory(){$('examsSummary').innerHTML=`<article class="exam-summa
 function renderProgress(){$('progressUnitsList').innerHTML=CURRICULUM_UNITS.map(u=>`<article class="progress-unit-card"><h2>الوحدة ${u.number}: ${esc(u.title)}</h2>${u.lessons.map(l=>`<div class="lesson-item"><span>${state.completedLessons.includes(l.id)?'✅':'📖'}</span><strong style="flex:1">${esc(l.title)}</strong><span>${clamp(state.lessonProgress[l.id]||0)}%</span></div>`).join('')}</article>`).join('');dashboard();}
 function updateAchievements(){const s=new Set(state.achievements||[]);if(state.completedLessons.length>=1)s.add('first');if(state.completedLessons.length>=5)s.add('five');if(state.completedLessons.filter(id=>id.startsWith('lesson')).length>=3)s.add('unit');if(state.completedLessons.length===APP.totalLessons)s.add('all');state.achievements=[...s];save();}
 function renderAchievements(){updateAchievements();$('achievementsGrid').innerHTML=ACH.map(a=>`<article class="achievement-card ${state.achievements.includes(a[0])?'':'locked'}"><div class="achievement-icon">${a[1]}</div><h3>${esc(a[2])}</h3><p>${esc(a[3])}</p><small>${state.achievements.includes(a[0])?'تم الفتح ✅':'مغلق 🔒'}</small></article>`).join('');}
-function prepareSpeech(){const box=$('lessonContent');if(!box)return;speechWordSpans=[];speechMap=[];let full='';const walker=document.createTreeWalker(box,NodeFilter.SHOW_TEXT);const nodes=[];let n;while((n=walker.nextNode())){if(n.nodeValue.trim())nodes.push(n);}nodes.forEach(node=>{const text=node.nodeValue,frag=document.createDocumentFragment();let m;const re=/\S+|\s+/g;while((m=re.exec(text))){const part=m[0],span=document.createElement('span');span.textContent=part;if(/\S/.test(part)){span.className='js-speech-word';const start=full.length;full+=part;speechMap.push({start,end:full.length,span});speechWordSpans.push(span);}else full+=part;frag.appendChild(span);}node.parentNode.replaceChild(frag,node);});speechText=full;if(!document.getElementById('speechStyle')){const st=document.createElement('style');st.id='speechStyle';st.textContent='#lessonContent .js-speech-word{border-radius:5px;transition:.12s}#lessonContent .js-speech-active{background:#ffe66d;color:#172033;box-shadow:0 2px 8px rgba(0,0,0,.12)}';document.head.appendChild(st);}}
+function chooseArabicVoice(){
+  if(!('speechSynthesis' in window)) return null;
+  const voices=speechSynthesis.getVoices();
+  return voices.find(v=>/^ar(-|_)/i.test(v.lang)) || voices.find(v=>/arabic|العربية|ar-eg/i.test((v.name||'')+' '+(v.lang||''))) || voices[0] || null;
+}
+function prepareSpeech(){
+  const box=$('lessonContent'); if(!box) return;
+  box.querySelectorAll('span.js-speech-word').forEach(span=>span.replaceWith(document.createTextNode(span.textContent)));
+  speechWordSpans=[]; speechMap=[]; let full='';
+  const walker=document.createTreeWalker(box,NodeFilter.SHOW_TEXT); const nodes=[]; let n;
+  while((n=walker.nextNode())) if(n.nodeValue.trim()) nodes.push(n);
+  nodes.forEach(node=>{
+    const text=node.nodeValue,frag=document.createDocumentFragment(); let m; const re=/\S+|\s+/g;
+    while((m=re.exec(text))){const part=m[0],span=document.createElement('span'); span.textContent=part;
+      if(/\S/.test(part)){span.className='js-speech-word';const start=full.length;full+=part;speechMap.push({start,end:full.length,span});speechWordSpans.push(span);} else full+=part;
+      frag.appendChild(span);
+    }
+    node.parentNode.replaceChild(frag,node);
+  });
+  speechText=full;
+}
 function clearSpeech(){speechWordSpans.forEach(s=>s.classList.remove('js-speech-active'));}
-function speak(){if(!('speechSynthesis'in window)){toast('المتصفح لا يدعم القراءة الصوتية.','warning');return;}if(!currentLesson)return;stopSpeak();prepareSpeech();const txt=[$('lessonTitle').innerText,$('lessonIntroText').innerText,$('lessonKeyIdeaText').innerText,speechText].join('. ');utterance=new SpeechSynthesisUtterance(txt);utterance.lang=APP.speechLanguage;utterance.rate=Number($('readingSpeed').value||.9);utterance.onstart=()=>{$('readLessonButton').disabled=true;$('pauseReadingButton').disabled=false;$('stopReadingButton').disabled=false;$('speechStatus').textContent='🔊 جاري القراءة مع التظليل';};utterance.onboundary=e=>{const i=Math.max(0,e.charIndex-(($('lessonTitle').innerText+' '+$('lessonIntroText').innerText+' '+$('lessonKeyIdeaText').innerText).length+3));clearSpeech();const hit=speechMap.find(x=>i>=x.start&&i<x.end);if(hit){hit.span.classList.add('js-speech-active');hit.span.scrollIntoView({behavior:'smooth',block:'center'});}};utterance.onend=resetSpeech;utterance.onerror=resetSpeech;speechSynthesis.speak(utterance);}
-function pauseSpeak(){if(!('speechSynthesis'in window))return;if(speechSynthesis.paused){speechSynthesis.resume();$('pauseReadingButton').textContent='⏸️ إيقاف مؤقت';}else if(speechSynthesis.speaking){speechSynthesis.pause();$('pauseReadingButton').textContent='▶️ متابعة';}}
-function stopSpeak(){if('speechSynthesis'in window)speechSynthesis.cancel();resetSpeech();}
+function makeSpeechChunks(text,maxChars=1200){
+  const clean=text.replace(/\s+/g,' ').trim(); if(!clean)return [];
+  const sentences=clean.match(/[^.!؟!?]+[.!؟!?]+|[^.!؟!?]+$/g)||[clean]; const chunks=[]; let cur='';
+  for(const sentence of sentences){
+    if((cur+' '+sentence).trim().length>maxChars && cur){chunks.push(cur.trim());cur=sentence;} else cur+=(cur?' ':'')+sentence;
+  }
+  if(cur.trim())chunks.push(cur.trim()); return chunks;
+}
+function speak(){
+  if(!('speechSynthesis' in window)){toast('القراءة الصوتية غير متاحة في هذا المتصفح. جرّب Chrome على الهاتف.','warning');return;}
+  if(!currentLesson)return;
+  stopSpeak(); prepareSpeech();
+  const prefix=[$('lessonTitle').innerText,$('lessonIntroText').innerText,$('lessonKeyIdeaText').innerText].join('. ');
+  speechChunks=makeSpeechChunks(prefix+'. '+speechText,1100); speechChunkIndex=0; speechVoice=chooseArabicVoice(); speechRunToken++;
+  $('readLessonButton').disabled=true;$('pauseReadingButton').disabled=false;$('stopReadingButton').disabled=false;$('speechStatus').textContent='🔊 جاري قراءة الدرس كاملًا…';
+  setTimeout(()=>speakNextChunk(speechRunToken),80);
+}
+function speakNextChunk(token){
+  if(token!==speechRunToken)return;
+  if(speechChunkIndex>=speechChunks.length){resetSpeech();return;}
+  const text=speechChunks[speechChunkIndex++];
+  utterance=new SpeechSynthesisUtterance(text); utterance.lang='ar-EG'; utterance.rate=Number($('readingSpeed').value||.9); utterance.pitch=1;
+  if(speechVoice) utterance.voice=speechVoice;
+  utterance.onstart=()=>{$('speechStatus').textContent=`🔊 جاري القراءة… الجزء الصوتي ${speechChunkIndex} من ${speechChunks.length}`;};
+  utterance.onboundary=e=>{
+    const prefixLen=($('lessonTitle').innerText+' '+$('lessonIntroText').innerText+' '+$('lessonKeyIdeaText').innerText).length+3;
+    const global=Math.max(0,e.charIndex-(speechChunkIndex===1?prefixLen:0)); clearSpeech();
+    const hit=speechMap.find(x=>global>=x.start&&global<x.end);
+    if(hit){hit.span.classList.add('js-speech-active');}
+  };
+  utterance.onend=()=>{if(token===speechRunToken)setTimeout(()=>speakNextChunk(token),80);};
+  utterance.onerror=()=>{if(token===speechRunToken){toast('حدث توقف في القراءة الصوتية. اضغط قراءة الدرس مرة أخرى.','warning');resetSpeech();}};
+  speechSynthesis.speak(utterance);
+}
+function pauseSpeak(){
+  if(!('speechSynthesis'in window))return;
+  if(speechSynthesis.paused){speechSynthesis.resume();$('pauseReadingButton').textContent='⏸️ إيقاف مؤقت';}
+  else if(speechSynthesis.speaking){speechSynthesis.pause();$('pauseReadingButton').textContent='▶️ متابعة';}
+}
+function stopSpeak(){speechRunToken++;speechChunks=[];speechChunkIndex=0;if('speechSynthesis'in window)speechSynthesis.cancel();resetSpeech();}
 function resetSpeech(){$('readLessonButton').disabled=false;$('pauseReadingButton').disabled=true;$('stopReadingButton').disabled=true;$('pauseReadingButton').textContent='⏸️ إيقاف مؤقت';$('speechStatus').textContent='';clearSpeech();}
+if('speechSynthesis' in window){speechSynthesis.onvoiceschanged=()=>{speechVoice=chooseArabicVoice();};setTimeout(()=>{speechVoice=chooseArabicVoice();},500);}
+function initAmbientParticles(){
+  const box=$('ambientParticles'); if(!box||box.children.length)return;
+  for(let i=0;i<28;i++){const d=document.createElement('span');d.className='ambient-particle';d.style.left=(Math.random()*100)+'%';d.style.setProperty('--dx',((Math.random()-.5)*180)+'px');d.style.setProperty('--dur',(10+Math.random()*16)+'s');d.style.animationDelay=(-Math.random()*20)+'s';box.appendChild(d);}
+}
 function openMenu(){$('sideMenu').classList.add('open');$('menuOverlay').classList.add('open');}function closeMenu(){$('sideMenu')?.classList.remove('open');$('menuOverlay')?.classList.remove('open');}
 function bind(){$('menuButton').onclick=openMenu;$('closeMenuButton').onclick=closeMenu;$('menuOverlay').onclick=closeMenu;$('homeButton').onclick=()=>showScreen('homeScreen');$$('.navigation-item').forEach(b=>b.onclick=()=>{showScreen(b.dataset.screen);if(b.dataset.screen==='unitsScreen')renderUnits();if(b.dataset.screen==='progressScreen')renderProgress();if(b.dataset.screen==='examsScreen')renderHistory();if(b.dataset.screen==='achievementsScreen')renderAchievements();});$$('[data-screen]').forEach(b=>{if(!b.classList.contains('navigation-item'))b.onclick=()=>{showScreen(b.dataset.screen);if(b.dataset.screen==='unitsScreen')renderUnits();}});$('continueLessonButton').onclick=()=>{const l=lessons()[Math.min(state.unlockedLessons-1,APP.totalLessons-1)];if(l)openLesson(l.id);};$('lessonBackButton').onclick=()=>{stopSpeak();showScreen('unitsScreen');renderUnits();};$('examBackButton').onclick=()=>{showScreen('lessonScreen');renderLesson();};$('startLessonExamButton').onclick=()=>startExam();$('previousQuestionButton').onclick=prevQ;$('nextQuestionButton').onclick=nextQ;$('submitExamButton').onclick=submitExam;$('reviewExamButton').onclick=()=>review(lastExam);$('retryExamButton').onclick=()=>startExam(lastExam?.lessonId);$('nextLessonButton').onclick=()=>{const n=lessons()[indexOfLesson(lastExam.lessonId)+1];if(n)openLesson(n.id);else showScreen('homeScreen');};$('reviewBackButton').onclick=()=>{showScreen('examsScreen');renderHistory();};$('readLessonButton').onclick=speak;$('pauseReadingButton').onclick=pauseSpeak;$('stopReadingButton').onclick=stopSpeak;$('modalCloseButton').onclick=()=>$('modalLayer').classList.remove('open');}
-function init(){load();bind();updateAchievements();renderHome();showScreen('homeScreen');}
+function init(){load();bind();initAmbientParticles();updateAchievements();renderHome();showScreen('homeScreen');}
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
 })();
